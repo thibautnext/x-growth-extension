@@ -1,0 +1,35 @@
+# Development files
+.DS_Store
+*.log
+*.swp
+*.swo
+*~
+
+# Editor directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node modules (if added later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs (if added later)
+dist/
+build/
+*.zip
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# SVG source files (optional, keep only PNGs for production)
+icons/*.svg

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Growth Dashboard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">
+        <svg class="logo" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="#1D9BF0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        X Growth
+      </h1>
+      <div class="version">v1.0.0</div>
+    </header>
+
+    <!-- Reply Stats Section -->
+    <section class="stats-section">
+      <h2 class="section-title">Reply Tracker</h2>
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-label">Today</div>
+          <div class="stat-value" id="todayCount">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">This Week</div>
+          <div class="stat-value" id="weekCount">0</div>
+        </div>
+      </div>
+
+      <!-- Weekly Chart -->
+      <div class="chart-container">
+        <div class="chart-title">Last 7 Days</div>
+        <div class="chart" id="weeklyChart">
+          <!-- Dynamically populated bars -->
+        </div>
+        <div class="chart-labels" id="chartLabels">
+          <!-- Dynamically populated labels -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Niche Keywords Section -->
+    <section class="keywords-section">
+      <h2 class="section-title">Niche Keywords</h2>
+      <p class="section-description">Highlight tweets matching these topics</p>
+
+      <div class="keywords-container">
+        <div class="keywords-list" id="keywordsList">
+          <!-- Dynamically populated keywords -->
+        </div>
+
+        <div class="keyword-input-group">
+          <input
+            type="text"
+            id="keywordInput"
+            class="keyword-input"
+            placeholder="Add keyword..."
+            maxlength="30"
+          >
+          <button id="addKeywordBtn" class="btn-add" title="Add keyword">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section class="settings-section">
+      <h2 class="section-title">Settings</h2>
+
+      <div class="setting-item">
+        <label class="setting-label">
+          <input type="checkbox" id="enableScoring" checked>
+          <span>Show opportunity scores on tweets</span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <label class="setting-label">
+          <input type="checkbox" id="enableNicheFilter" checked>
+          <span>Highlight niche-relevant tweets</span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <label class="setting-label">
+          <input type="checkbox" id="enableQuickStats" checked>
+          <span>Show account stats on hover</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <button id="resetStatsBtn" class="btn-secondary">Reset Stats</button>
+      <a href="https://x.com" target="_blank" class="footer-link">Open X.com</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

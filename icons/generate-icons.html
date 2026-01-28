@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Icons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #15202B;
+      color: #E7E9EA;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      color: #1D9BF0;
+    }
+    .icon-preview {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    .preview-item {
+      text-align: center;
+    }
+    canvas {
+      border: 1px solid #2F3336;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    button {
+      background: #1D9BF0;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+    }
+    button:hover {
+      background: #1A8CD8;
+    }
+    .instructions {
+      background: #192734;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .instructions h2 {
+      margin-top: 0;
+      color: #1D9BF0;
+    }
+    .instructions ol {
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>X Growth Extension - Icon Generator</h1>
+
+    <div class="icon-preview">
+      <div class="preview-item">
+        <canvas id="icon16" width="16" height="16"></canvas>
+        <div>16x16</div>
+      </div>
+      <div class="preview-item">
+        <canvas id="icon48" width="48" height="48"></canvas>
+        <div>48x48</div>
+      </div>
+      <div class="preview-item">
+        <canvas id="icon128" width="128" height="128"></canvas>
+        <div>128x128</div>
+      </div>
+    </div>
+
+    <button onclick="downloadAllIcons()">Download All Icons</button>
+
+    <div class="instructions">
+      <h2>Instructions</h2>
+      <ol>
+        <li>Click the "Download All Icons" button above</li>
+        <li>Save each PNG file to the <code>icons/</code> directory:
+          <ul>
+            <li>icon16.png</li>
+            <li>icon48.png</li>
+            <li>icon128.png</li>
+          </ul>
+        </li>
+        <li>The extension will now have proper icons!</li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Draw growth arrow icon on canvas
+     */
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      const scale = size / 128; // Scale everything based on 128x128 base
+
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+
+      // Fill background
+      ctx.fillStyle = '#15202B';
+      ctx.fillRect(0, 0, size, size);
+
+      // Draw growth arrow
+      ctx.strokeStyle = '#1D9BF0';
+      ctx.fillStyle = '#1D9BF0';
+      ctx.lineWidth = 8 * scale;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      const padding = 20 * scale;
+      const arrowPadding = 15 * scale;
+
+      // Draw line path (trending upward)
+      ctx.beginPath();
+      ctx.moveTo(padding, size - padding);
+      ctx.lineTo(size * 0.35, size * 0.65);
+      ctx.lineTo(size * 0.55, size * 0.55);
+      ctx.lineTo(size - padding - arrowPadding, padding + arrowPadding);
+      ctx.stroke();
+
+      // Draw arrow head
+      ctx.beginPath();
+      ctx.moveTo(size - padding, padding);
+      ctx.lineTo(size - padding - arrowPadding * 1.5, padding + arrowPadding * 0.5);
+      ctx.lineTo(size - padding - arrowPadding * 0.5, padding + arrowPadding * 1.5);
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw data points (circles)
+      const points = [
+        { x: padding, y: size - padding },
+        { x: size * 0.35, y: size * 0.65 },
+        { x: size * 0.55, y: size * 0.55 },
+        { x: size - padding - arrowPadding, y: padding + arrowPadding }
+      ];
+
+      ctx.fillStyle = '#1D9BF0';
+      points.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 4 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Add subtle glow effect for larger icons
+      if (size >= 48) {
+        ctx.shadowColor = 'rgba(29, 155, 240, 0.4)';
+        ctx.shadowBlur = 10 * scale;
+
+        // Redraw points with glow
+        points.forEach(point => {
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, 4 * scale, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    /**
+     * Download canvas as PNG
+     */
+    function downloadCanvas(canvas, filename) {
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+
+    /**
+     * Download all icons
+     */
+    function downloadAllIcons() {
+      const icons = [
+        { id: 'icon16', filename: 'icon16.png' },
+        { id: 'icon48', filename: 'icon48.png' },
+        { id: 'icon128', filename: 'icon128.png' }
+      ];
+
+      icons.forEach((icon, index) => {
+        setTimeout(() => {
+          const canvas = document.getElementById(icon.id);
+          downloadCanvas(canvas, icon.filename);
+        }, index * 500); // Stagger downloads
+      });
+    }
+
+    // Generate icons on load
+    window.addEventListener('load', () => {
+      drawIcon(document.getElementById('icon16'), 16);
+      drawIcon(document.getElementById('icon48'), 48);
+      drawIcon(document.getElementById('icon128'), 128);
+    });
+  </script>
+</body>
+</html>
