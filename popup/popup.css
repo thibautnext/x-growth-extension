@@ -126,6 +126,22 @@ body {
   transform: scale(0.95);
 }
 
+.preset-btn.active {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: white;
+}
+
+.preset-btn.reset-btn {
+  background: transparent;
+  border-color: var(--danger-red);
+  color: var(--danger-red);
+}
+
+.preset-btn.reset-btn:hover {
+  background: rgba(244, 33, 46, 0.1);
+}
+
 /* Stat Cards */
 .stat-cards {
   display: grid;

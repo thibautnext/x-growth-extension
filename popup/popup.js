@@ -214,6 +214,7 @@ const keywordsManager = {
     const keywords = await storage.get('nicheKeywords');
     this.keywords = keywords || [];
     this.render();
+    this.updatePresetButtons();
   },
 
   /**
@@ -272,24 +273,56 @@ const keywordsManager = {
   },
 
   /**
-   * Add keywords from a preset
+   * Toggle keywords from a preset (add if not present, remove if present)
    */
-  async addPreset(presetName) {
+  async togglePreset(presetName) {
     const presetKeywords = keywordPresets[presetName];
     if (!presetKeywords) return;
 
-    let added = 0;
-    for (const keyword of presetKeywords) {
-      if (!this.keywords.includes(keyword) && this.keywords.length < 50) {
-        this.keywords.push(keyword);
-        added++;
+    // Check if preset is currently active (most keywords present)
+    const presentCount = presetKeywords.filter(k => this.keywords.includes(k)).length;
+    const isActive = presentCount >= presetKeywords.length / 2;
+
+    if (isActive) {
+      // Remove preset keywords
+      this.keywords = this.keywords.filter(k => !presetKeywords.includes(k));
+    } else {
+      // Add preset keywords
+      for (const keyword of presetKeywords) {
+        if (!this.keywords.includes(keyword) && this.keywords.length < 50) {
+          this.keywords.push(keyword);
+        }
       }
     }
 
-    if (added > 0) {
-      await this.save();
-      this.render();
-    }
+    await this.save();
+    this.render();
+    this.updatePresetButtons();
+  },
+
+  /**
+   * Reset all keywords
+   */
+  async reset() {
+    this.keywords = [];
+    await this.save();
+    this.render();
+    this.updatePresetButtons();
+  },
+
+  /**
+   * Update preset button states
+   */
+  updatePresetButtons() {
+    document.querySelectorAll('.preset-btn[data-preset]').forEach(btn => {
+      const preset = btn.getAttribute('data-preset');
+      const presetKeywords = keywordPresets[preset];
+      if (!presetKeywords) return;
+
+      const presentCount = presetKeywords.filter(k => this.keywords.includes(k)).length;
+      const isActive = presentCount >= presetKeywords.length / 2;
+      btn.classList.toggle('active', isActive);
+    });
   },
 
   /**
@@ -398,12 +431,17 @@ function setupEventListeners() {
     }
   });
 
-  // Preset buttons
-  document.querySelectorAll('.preset-btn').forEach(btn => {
+  // Preset buttons (toggle)
+  document.querySelectorAll('.preset-btn[data-preset]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const preset = btn.getAttribute('data-preset');
-      await keywordsManager.addPreset(preset);
+      await keywordsManager.togglePreset(preset);
     });
+  });
+
+  // Reset keywords button
+  document.getElementById('resetKeywordsBtn').addEventListener('click', async () => {
+    await keywordsManager.reset();
   });
 
   // Settings checkboxes
