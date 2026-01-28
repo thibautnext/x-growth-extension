@@ -194,6 +194,15 @@ const replyStats = {
   }
 };
 
+// Keyword Presets
+const keywordPresets = {
+  ai: ['ia', 'ai', 'gpt', 'claude', 'llm', 'chatgpt', 'openai', 'anthropic', 'machine learning', 'deep learning', 'prompt', 'artificial intelligence', 'intelligence artificielle', 'copilot', 'gemini', 'mistral'],
+  tech: ['tech', 'startup', 'saas', 'dev', 'coding', 'code', 'javascript', 'python', 'api', 'software', 'app', 'product', 'launch', 'opensource', 'github', 'programming'],
+  crypto: ['crypto', 'bitcoin', 'btc', 'ethereum', 'eth', 'defi', 'nft', 'web3', 'blockchain', 'token', 'airdrop', 'trading', 'binance', 'solana', 'wallet'],
+  business: ['business', 'entrepreneur', 'startup', 'founder', 'revenue', 'mrr', 'saas', 'growth', 'marketing', 'sales', 'b2b', 'indiehacker', 'solopreneur', 'monetization', 'side project'],
+  news: ['breaking', 'actualité', 'news', 'urgent', 'officiel', 'annonce', 'politique', 'économie', 'france', 'europe', 'monde', 'élection', 'gouvernement', 'réforme']
+};
+
 // Keywords Manager
 const keywordsManager = {
   keywords: [],
@@ -243,8 +252,8 @@ const keywordsManager = {
       return;
     }
 
-    if (this.keywords.length >= 20) {
-      alert('Maximum 20 keywords allowed.');
+    if (this.keywords.length >= 50) {
+      alert('Maximum 50 keywords allowed.');
       return;
     }
 
@@ -260,6 +269,27 @@ const keywordsManager = {
     this.keywords = this.keywords.filter(k => k !== keyword);
     await this.save();
     this.render();
+  },
+
+  /**
+   * Add keywords from a preset
+   */
+  async addPreset(presetName) {
+    const presetKeywords = keywordPresets[presetName];
+    if (!presetKeywords) return;
+
+    let added = 0;
+    for (const keyword of presetKeywords) {
+      if (!this.keywords.includes(keyword) && this.keywords.length < 50) {
+        this.keywords.push(keyword);
+        added++;
+      }
+    }
+
+    if (added > 0) {
+      await this.save();
+      this.render();
+    }
   },
 
   /**
@@ -366,6 +396,14 @@ function setupEventListeners() {
       await keywordsManager.add(keyword);
       keywordInput.value = '';
     }
+  });
+
+  // Preset buttons
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const preset = btn.getAttribute('data-preset');
+      await keywordsManager.addPreset(preset);
+    });
   });
 
   // Settings checkboxes
