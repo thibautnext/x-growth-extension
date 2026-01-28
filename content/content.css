@@ -65,31 +65,27 @@ article[data-xg-niche="false"]:hover {
   opacity: 0.7;
 }
 
-/* XG Stats button (replaces hover tooltip) */
+/* XG Stats button - inline in engagement bar */
 .xg-stats-btn {
-  position: absolute;
-  top: 12px;
-  right: 48px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(29, 155, 240, 0.15);
-  border: 1px solid rgba(29, 155, 240, 0.3);
-  color: #1D9BF0;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(29, 155, 240, 0.12);
+  border: none;
+  color: #1D9BF0;
+  font-size: 10px;
+  cursor: pointer;
   transition: all 0.2s ease;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin-left: 4px;
+  vertical-align: middle;
+  padding: 0;
 }
 
 .xg-stats-btn:hover {
-  background: rgba(29, 155, 240, 0.3);
-  transform: scale(1.1);
+  background: rgba(29, 155, 240, 0.25);
 }
 
 .xg-stats-btn.active {

@@ -426,8 +426,11 @@
         }
       });
 
-      tweetElement.style.position = 'relative';
-      tweetElement.appendChild(btn);
+      // Insert into engagement bar instead of absolute position
+      const engagementBar = tweetElement.querySelector('[role="group"]');
+      if (engagementBar) {
+        engagementBar.appendChild(btn);
+      }
 
       // Close tooltip when clicking elsewhere
       document.addEventListener('click', (e) => {
