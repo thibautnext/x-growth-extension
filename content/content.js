@@ -233,7 +233,7 @@
     },
 
     /**
-     * Add score badge to tweet
+     * Add score badge to tweet - inserted into the engagement bar
      */
     addScoreBadge(tweetElement, score) {
       // Check if badge already exists
@@ -250,8 +250,16 @@
         <span>${label}</span>
       `;
 
-      tweetElement.style.position = 'relative';
-      tweetElement.appendChild(badge);
+      // Find the engagement bar (the row with reply, retweet, like, views, share)
+      const engagementBar = tweetElement.querySelector('[role="group"]');
+      if (engagementBar) {
+        engagementBar.style.position = 'relative';
+        engagementBar.appendChild(badge);
+      } else {
+        // Fallback: append to tweet
+        tweetElement.style.position = 'relative';
+        tweetElement.appendChild(badge);
+      }
     }
   };
 
@@ -375,29 +383,59 @@
     },
 
     /**
-     * Attach hover listeners to profile elements
+     * Attach stats button to tweet
      */
     attachListeners(tweetElement) {
-      const profileImages = tweetElement.querySelectorAll(config.selectors.profileImage);
+      // Don't add button if already exists
+      if (tweetElement.querySelector('.xg-stats-btn')) return;
 
-      profileImages.forEach(img => {
-        // Find associated profile link
-        const profileLink = img.closest('a[href^="/"]');
-        if (!profileLink) return;
+      // Find first profile link in tweet
+      const profileLinks = tweetElement.querySelectorAll('a[role="link"][href^="/"]');
+      let username = null;
 
-        const username = utils.extractUsername(profileLink.getAttribute('href'));
-        if (!username) return;
+      for (const link of profileLinks) {
+        const href = link.getAttribute('href');
+        if (href && !href.includes('/status/') && !href.includes('/photo/')) {
+          username = utils.extractUsername(href);
+          if (username) break;
+        }
+      }
 
-        img.addEventListener('mouseenter', (e) => {
-          if (state.settings.enableQuickStats) {
-            this.showTooltip(img, username, e);
-          }
-        });
+      if (!username) return;
 
-        img.addEventListener('mouseleave', () => {
+      // Create clickable stats button
+      const btn = document.createElement('div');
+      btn.className = 'xg-stats-btn';
+      btn.textContent = '📊';
+      btn.title = `Stats @${username}`;
+
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        // Toggle tooltip
+        if (btn.classList.contains('active')) {
           this.removeTooltip();
-        });
+          btn.classList.remove('active');
+        } else {
+          // Remove any other active btn
+          document.querySelectorAll('.xg-stats-btn.active').forEach(b => b.classList.remove('active'));
+          this.removeTooltip();
+          btn.classList.add('active');
+          await this.showTooltip(btn, username, e);
+        }
       });
+
+      tweetElement.style.position = 'relative';
+      tweetElement.appendChild(btn);
+
+      // Close tooltip when clicking elsewhere
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.xg-stats-btn') && !e.target.closest('.xg-stats-tooltip')) {
+          this.removeTooltip();
+          document.querySelectorAll('.xg-stats-btn.active').forEach(b => b.classList.remove('active'));
+        }
+      }, { once: true });
     }
   };
 
