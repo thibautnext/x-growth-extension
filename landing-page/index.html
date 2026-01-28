@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Growth - Grow on X/Twitter Faster</title>
+  <meta name="description" content="Extension Chrome gratuite pour identifier les meilleurs tweets sur lesquels répondre et grandir sur X/Twitter.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg: #0a0a0a;
+      --bg-card: #141414;
+      --text: #fafafa;
+      --text-muted: #a1a1aa;
+      --accent: #1D9BF0;
+      --accent-hover: #1a8cd8;
+      --green: #00BA7C;
+      --yellow: #FFD400;
+      --border: #27272a;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    /* Header */
+    header {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    
+    .logo svg {
+      width: 28px;
+      height: 28px;
+    }
+    
+    .cta-btn {
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    
+    .cta-btn:hover {
+      background: var(--accent-hover);
+    }
+    
+    /* Hero */
+    .hero {
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .badge {
+      display: inline-block;
+      background: rgba(29, 155, 240, 0.1);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      border: 1px solid rgba(29, 155, 240, 0.2);
+    }
+    
+    h1 {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    
+    h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background 0.2s;
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+    
+    /* Features */
+    .features {
+      padding: 80px 0;
+    }
+    
+    .features h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 48px;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(29, 155, 240, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    
+    .feature-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    /* How it works */
+    .how-it-works {
+      padding: 80px 0;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .how-it-works h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 48px;
+    }
+    
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    
+    .step {
+      text-align: center;
+      max-width: 250px;
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin: 0 auto 16px;
+    }
+    
+    .step h3 {
+      margin-bottom: 8px;
+    }
+    
+    .step p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    /* Pricing */
+    .pricing {
+      padding: 80px 0;
+    }
+    
+    .pricing h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    
+    .pricing > p {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+    }
+    
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+    }
+    
+    .pricing-card.featured {
+      border-color: var(--accent);
+      position: relative;
+    }
+    
+    .pricing-card.featured::before {
+      content: 'Populaire';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .pricing-card h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    
+    .price {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .price span {
+      font-size: 16px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    
+    .pricing-card ul {
+      list-style: none;
+      margin: 24px 0;
+      text-align: left;
+    }
+    
+    .pricing-card li {
+      padding: 8px 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .pricing-card li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+    }
+    
+    .pricing-card .btn-primary,
+    .pricing-card .btn-secondary {
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+    
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    
+    footer p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero {
+        padding: 60px 0;
+      }
+      
+      .steps {
+        gap: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="#1D9BF0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        X Growth
+      </div>
+      <a href="#pricing" class="cta-btn">Commencer gratuitement</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">🚀 Extension Chrome gratuite</div>
+      <h1>Grandis sur X/Twitter <span>2x plus vite</span></h1>
+      <p>L'extension qui identifie les meilleurs tweets sur lesquels répondre pour maximiser ta visibilité et ton engagement.</p>
+      <div class="hero-cta">
+        <a href="#pricing" class="btn-primary">Installer gratuitement →</a>
+        <a href="#features" class="btn-secondary">Voir les fonctionnalités</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="container">
+      <h2>Tout ce dont tu as besoin pour grandir</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Score d'opportunité</h3>
+          <p>Chaque tweet de ton feed reçoit un score. Vert = fonce, Rouge = passe. Plus besoin de deviner.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Filtre par niche</h3>
+          <p>Configure tes mots-clés (IA, crypto, tech...) et vois uniquement les tweets qui t'intéressent.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🙈</div>
+          <h3>Mode focus</h3>
+          <p>Masque complètement les tweets hors de ta niche pour rester concentré sur ce qui compte.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3>Dashboard de suivi</h3>
+          <p>Suis tes réponses quotidiennes et ta progression. La régularité paie.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Presets thématiques</h3>
+          <p>Un clic pour activer les mots-clés IA, Tech, Crypto, Business ou Actu.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>100% local</h3>
+          <p>Aucune donnée envoyée. Tout reste sur ton navigateur. Zéro tracking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <div class="container">
+      <h2>Comment ça marche</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Installe l'extension</h3>
+          <p>Gratuit, 30 secondes, depuis le Chrome Web Store.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Configure ta niche</h3>
+          <p>Ajoute tes mots-clés ou utilise les presets.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Réponds aux tweets verts</h3>
+          <p>Focus sur les meilleures opportunités, grandis plus vite.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <h2>Choisis ton plan</h2>
+      <p>Commence gratuitement, upgrade quand tu veux.</p>
+      <div class="pricing-cards">
+        <div class="pricing-card">
+          <h3>Free</h3>
+          <div class="price">0€</div>
+          <ul>
+            <li>Score d'opportunité sur tous les tweets</li>
+            <li>3 mots-clés max</li>
+            <li>Dashboard de suivi basique</li>
+            <li>Mises à jour incluses</li>
+          </ul>
+          <a href="#" class="btn-secondary">Installer gratuitement</a>
+        </div>
+        <div class="pricing-card featured">
+          <h3>Pro</h3>
+          <div class="price">9€<span>/mois</span></div>
+          <ul>
+            <li>Tout du plan Free</li>
+            <li>Mots-clés illimités</li>
+            <li>Mode focus (masquer les tweets)</li>
+            <li>Tous les presets thématiques</li>
+            <li>Stats détaillées</li>
+            <li>Support prioritaire</li>
+          </ul>
+          <a href="#" class="btn-primary">Commencer l'essai gratuit</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Lifetime</h3>
+          <div class="price">49€</div>
+          <ul>
+            <li>Tout du plan Pro</li>
+            <li>Paiement unique</li>
+            <li>Accès à vie</li>
+            <li>Toutes les futures fonctionnalités</li>
+          </ul>
+          <a href="#" class="btn-secondary">Acheter maintenant</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Fait avec ❤️ par <a href="https://x.com/ThibautNext" target="_blank">@ThibautNext</a></p>
+    </div>
+  </footer>
+</body>
+</html>
