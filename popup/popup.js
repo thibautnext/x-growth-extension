@@ -285,7 +285,7 @@ const keywordsManager = {
 
       const removeBtn = document.createElement('button');
       removeBtn.className = 'keyword-remove';
-      removeBtn.innerHTML = '×';
+      removeBtn.textContent = '✕';
       removeBtn.title = 'Remove keyword';
       removeBtn.addEventListener('click', () => this.remove(keyword));
       tag.appendChild(removeBtn);
