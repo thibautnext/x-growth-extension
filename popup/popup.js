@@ -301,12 +301,13 @@ const settingsManager = {
    * Load settings from storage
    */
   async load() {
-    const settings = await storage.get(['enableScoring', 'enableNicheFilter', 'enableQuickStats']);
+    const settings = await storage.get(['enableScoring', 'enableNicheFilter', 'enableQuickStats', 'hideNonNiche']);
 
     // Set defaults if not set
     document.getElementById('enableScoring').checked = settings.enableScoring !== false;
     document.getElementById('enableNicheFilter').checked = settings.enableNicheFilter !== false;
     document.getElementById('enableQuickStats').checked = settings.enableQuickStats !== false;
+    document.getElementById('hideNonNiche').checked = settings.hideNonNiche === true;
   },
 
   /**
@@ -378,6 +379,10 @@ function setupEventListeners() {
 
   document.getElementById('enableQuickStats').addEventListener('change', (e) => {
     settingsManager.save('enableQuickStats', e.target.checked);
+  });
+
+  document.getElementById('hideNonNiche').addEventListener('change', (e) => {
+    settingsManager.save('hideNonNiche', e.target.checked);
   });
 
   // Reset stats button

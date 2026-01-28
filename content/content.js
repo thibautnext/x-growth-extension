@@ -27,7 +27,8 @@
     settings: {
       enableScoring: true,
       enableNicheFilter: true,
-      enableQuickStats: true
+      enableQuickStats: true,
+      hideNonNiche: false
     },
     keywords: [],
     processedTweets: new WeakSet(),
@@ -593,17 +594,33 @@
           'enableScoring',
           'enableNicheFilter',
           'enableQuickStats',
+          'hideNonNiche',
           'nicheKeywords'
         ]);
 
         state.settings.enableScoring = data.enableScoring !== false;
         state.settings.enableNicheFilter = data.enableNicheFilter !== false;
         state.settings.enableQuickStats = data.enableQuickStats !== false;
+        state.settings.hideNonNiche = data.hideNonNiche === true;
         state.keywords = data.nicheKeywords || [];
+
+        // Apply hide mode to body
+        this.applyHideMode();
 
         console.log('[X Growth] Settings loaded:', state.settings);
       } catch (error) {
         console.error('[X Growth] Failed to load settings:', error);
+      }
+    },
+
+    /**
+     * Apply or remove hide mode on body
+     */
+    applyHideMode() {
+      if (state.settings.hideNonNiche && state.keywords.length > 0) {
+        document.body.setAttribute('data-xg-hide-mode', 'true');
+      } else {
+        document.body.removeAttribute('data-xg-hide-mode');
       }
     }
   };
@@ -613,11 +630,17 @@
     if (message.type === 'SETTINGS_UPDATED') {
       Object.assign(state.settings, message.settings);
 
+      // Apply hide mode if changed
+      settingsLoader.applyHideMode();
+
       // Reprocess all tweets
       state.processedTweets = new WeakSet();
       tweetProcessor.processAllTweets();
     } else if (message.type === 'KEYWORDS_UPDATED') {
       state.keywords = message.keywords;
+
+      // Apply hide mode (depends on keywords)
+      settingsLoader.applyHideMode();
 
       // Reprocess all tweets
       state.processedTweets = new WeakSet();

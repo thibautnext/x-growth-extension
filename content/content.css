@@ -65,6 +65,11 @@ article[data-xg-niche="false"]:hover {
   opacity: 0.7;
 }
 
+/* Hide mode - completely hide non-matching tweets */
+body[data-xg-hide-mode="true"] article[data-xg-niche="false"] {
+  display: none !important;
+}
+
 /* XG Stats button - inline in engagement bar */
 .xg-stats-btn {
   display: inline-flex;
